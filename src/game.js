@@ -2,8 +2,10 @@ const Asteroid = require("./asteroid.js");
 const Ship = require("./ship");
 const MovingObject = require("./moving_object");
 const Bullet = require('./bullet');
+const Consts = require('./consts');
 
 const Game = function () {
+  this.controlMode = 'polar';
   this.movingObjects = new Set();
   for (let i = 0; i < Game.NUM_ASTEROIDS; i++) {
     const pos = this.randomPosition();
@@ -32,25 +34,30 @@ Game.prototype.remove = function (object) {
   }
 }
 
+Game.prototype.getControlMode = function() {
+  return this.controlMode;
+}
+
+Game.prototype.setControlMode = function(mode) {
+  this.controlMode = mode;
+  this.ship.updateControl();
+}
 
 Game.prototype.randomPosition = function () {
-  return [(Math.random() * Game.DIM_X), (Math.random() * Game.DIM_Y)];
+  return [(Math.random() * Consts.DIM_X), (Math.random() * Consts.DIM_Y)];
 }
 
 /**
  * @param {CanvasRenderingContext2D} context
  */
 Game.prototype.draw = function (context) {
-  context.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
+  context.clearRect(0, 0, Consts.DIM_X, Consts.DIM_Y);
   this.allObjects().forEach(o => o.draw(context));
 }
 
 Game.prototype.moveObjects = function () {
-  if (this.keyStatus & Game.wMask) this.ship.power([0, -0.25]);
-  if (this.keyStatus & Game.aMask) this.ship.power([-0.25, 0]);
-  if (this.keyStatus & Game.sMask) this.ship.power([0, 0.25]);
-  if (this.keyStatus & Game.dMask) this.ship.power([0.25, 0]);
-  if (this.keyStatus & Game.spaceMask) this.ship.fireBullet();
+  this.ship.control(this.keyStatus);
+  if (this.keyStatus & Consts.spaceMask) this.ship.fireBullet();
   this.allObjects().forEach(o => {
     if (o.isWrappable) {
       o.move(this.wrap);
@@ -68,7 +75,7 @@ Game.prototype.moveObjects = function () {
  * @returns {[number, number]}
  */
 Game.prototype.wrap = function ([x, y]) {
-  return [(x + Game.DIM_X) % Game.DIM_X, (y + Game.DIM_Y) % Game.DIM_Y];
+  return [(x + Consts.DIM_X) % Consts.DIM_X, (y + Consts.DIM_Y) % Consts.DIM_Y];
 }
 
 Game.prototype.checkCollisions = function () {
@@ -112,13 +119,6 @@ Game.prototype.isOutOfBounds = function(pos) {
   return x > Game.DIM_X || x < 0 || y > Game.DIM_Y || y < 0;
 }
 
-Game.DIM_X = 768;
-Game.DIM_Y = 512;
-Game.NUM_ASTEROIDS = 10;
-Game.wMask = 0x1;
-Game.aMask = 0x10;
-Game.sMask = 0x100;
-Game.dMask = 0x1000;
-Game.spaceMask = 0x10000;
+Game.NUM_ASTEROIDS = 20;
 
 module.exports = Game;

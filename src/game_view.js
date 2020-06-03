@@ -1,6 +1,7 @@
 const Game = require("./game");
+const Consts = require("./consts")
 
-const GameView = function() {
+const GameView = function () {
 
   const appContainer = document.getElementById("app-container");
 
@@ -10,13 +11,23 @@ const GameView = function() {
   const context = canvas.getContext("2d");
 
   const dpr = window.devicePixelRatio;
-  canvas.width = Game.DIM_X * dpr;
-  canvas.height = Game.DIM_Y * dpr;
+  canvas.width = Consts.DIM_X * dpr;
+  canvas.height = Consts.DIM_Y * dpr;
   canvas.id = "main-canvas";
   context.scale(dpr, dpr);
   canvas.tabIndex = 1;
   canvas.autofocus = true;
   appContainer.appendChild(canvas);
+
+  const switchModeAction = function () {
+    switchModeButton.innerText = `Switch to ${this.getControlMode()} mode`;
+    this.setControlMode(this.getControlMode() === 'polar' ? 'cartesian' : 'polar');
+  }.bind(this.game);
+
+  const switchModeButton = document.createElement("button");
+  switchModeButton.onclick = switchModeAction;
+  switchModeButton.innerText = `Switch to ${this.game.getControlMode() === 'polar' ? 'cartesian' : 'polar'} mode`;
+  appContainer.appendChild(switchModeButton);
 
   this.context = context;
   this.canvas = canvas;
@@ -25,38 +36,41 @@ const GameView = function() {
     canvas.addEventListener("keydown", (event) => {
       switch (event.key) {
         case 'w':
-          this.keyStatus |= Game.wMask;
+          this.keyStatus |= Consts.wMask;
           break;
         case 'a':
-          this.keyStatus |= Game.aMask;
+          this.keyStatus |= Consts.aMask;
           break;
         case 's':
-          this.keyStatus |= Game.sMask;
+          this.keyStatus |= Consts.sMask;
           break;
         case 'd':
-          this.keyStatus |= Game.dMask;
+          this.keyStatus |= Consts.dMask;
           break;
         case ' ':
-          this.keyStatus |= Game.spaceMask;
+          this.keyStatus |= Consts.spaceMask;
           break;
       }
     });
     canvas.addEventListener("keyup", (event) => {
       switch (event.key) {
         case 'w':
-          this.keyStatus &= ~Game.wMask;
+          this.keyStatus &= ~Consts.wMask;
           break;
         case 'a':
-          this.keyStatus &= ~Game.aMask;
+          this.keyStatus &= ~Consts.aMask;
           break;
         case 's':
-          this.keyStatus &= ~Game.sMask;
+          this.keyStatus &= ~Consts.sMask;
           break;
         case 'd':
-          this.keyStatus &= ~Game.dMask;
+          this.keyStatus &= ~Consts.dMask;
           break;
         case ' ':
-          this.keyStatus &= ~Game.spaceMask;
+          this.keyStatus &= ~Consts.spaceMask;
+          break;
+        case 'Escape':
+          switchModeAction();
           break;
       }
     })
@@ -66,7 +80,7 @@ const GameView = function() {
 
 }
 
-GameView.prototype.start = function() {
+GameView.prototype.start = function () {
   // this.bindKeyHandlers();
   const refresh = () => {
     this.game.step();
@@ -76,7 +90,7 @@ GameView.prototype.start = function() {
   refresh();
 }
 
-GameView.prototype.bindKeyHandlers = function() {
+GameView.prototype.bindKeyHandlers = function () {
   key('W', () => {
     this.game.ship.power([0, -1]);
   })
@@ -90,7 +104,7 @@ GameView.prototype.bindKeyHandlers = function() {
     this.game.ship.power([1, 0]);
   })
   key("space", () => {
-      this.game.ship.fireBullet();
+    this.game.ship.fireBullet();
   })
 }
 

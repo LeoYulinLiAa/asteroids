@@ -50,6 +50,12 @@ const Util = {
     } else {
       return null;
     }
+  },
+  rotate(vector, theta) {
+    const [x, y] = vector;
+    const x2 = x * Math.cos(theta) - y * Math.sin(theta);
+    const y2 = x * Math.sin(theta) + y * Math.cos(theta);
+    return [x2, y2];
   }
 };
 

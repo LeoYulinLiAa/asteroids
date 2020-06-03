@@ -43,3 +43,18 @@ a:active {
     display: flex;
     flex-flow: column;
 }
+#app-container button {
+    border-radius: 0.2rem;
+    background: #306097;
+    color: $text-primary;
+    border: none;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    outline: #3e70aa;
+    &:hover {
+        background: #3e70aa;
+    }
+    &:active {
+        background: #5980ac;
+    }
+}
