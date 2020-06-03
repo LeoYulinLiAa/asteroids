@@ -23,17 +23,6 @@ Ship.prototype.reset = function () {
   this.vel = [0, 0];
 }
 
-/**
- * @param {MovingObject} otherObject
- * @returns {boolean}
- */
-Ship.prototype.isCollidedWith = function (otherObject) {
-
-  const [x1, y1] = this.pos;
-  const [x2, y2] = otherObject.pos;
-  return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) < this.radius + otherObject.radius;
-};
-
 Ship.prototype.updateControl = function() {
   this.controller = controlScheme(this.game.getControlMode());
 }
