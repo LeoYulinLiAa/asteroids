@@ -25,10 +25,12 @@ const GameView = function() {
 
 GameView.prototype.start = function() {
   this.bindKeyHandlers();
-  setInterval(() => {
+  const refresh = () => {
     this.game.step();
     this.game.draw(this.context);
-  }, 20);
+    requestAnimationFrame(refresh);
+  }
+  refresh();
 }
 
 GameView.prototype.bindKeyHandlers = function() {
