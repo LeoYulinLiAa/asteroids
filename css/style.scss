@@ -1,4 +1,5 @@
 $background-color: #284b6f;
+$canvas-color: #294868;
 $text-primary: #efefef;
 $text-secondary: #d9d9d9;
 body {
@@ -33,6 +34,7 @@ a:active {
 }
 #main-canvas {
     width: 100%;
+    background-color: $canvas-color;
 }
 #main-canvas:focus {
     outline: none;

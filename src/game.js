@@ -13,6 +13,7 @@ const Game = function () {
   const pos = this.randomPostion();
   this.ship = new Ship({ pos }, this);
   this.bullets = new Set();
+  this.keyStatus = 0;
 }
 
 Game.prototype.add = function (object) {
@@ -45,6 +46,11 @@ Game.prototype.draw = function (context) {
 }
 
 Game.prototype.moveObjects = function () {
+  if (this.keyStatus & Game.wMask) this.ship.power([0, -0.25]);
+  if (this.keyStatus & Game.aMask) this.ship.power([-0.25, 0]);
+  if (this.keyStatus & Game.sMask) this.ship.power([0, 0.25]);
+  if (this.keyStatus & Game.dMask) this.ship.power([0.25, 0]);
+  if (this.keyStatus & Game.spaceMask) this.ship.fireBullet();
   this.allObjects().forEach(o => {
     if (o.isWrappable) {
       o.move(this.wrap);
@@ -109,5 +115,10 @@ Game.prototype.isOutOfBounds = function(pos) {
 Game.DIM_X = 768;
 Game.DIM_Y = 512;
 Game.NUM_ASTEROIDS = 10;
+Game.wMask = 0x1;
+Game.aMask = 0x10;
+Game.sMask = 0x100;
+Game.dMask = 0x1000;
+Game.spaceMask = 0x10000;
 
 module.exports = Game;

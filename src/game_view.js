@@ -8,7 +8,7 @@ const GameView = function() {
 
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
-  this.dimension = { width: Game.DIM_X, height: Game.DIM_Y }
+
   const dpr = window.devicePixelRatio;
   canvas.width = Game.DIM_X * dpr;
   canvas.height = Game.DIM_Y * dpr;
@@ -21,10 +21,53 @@ const GameView = function() {
   this.context = context;
   this.canvas = canvas;
 
+  const keybindings = function () {
+    canvas.addEventListener("keydown", (event) => {
+      switch (event.key) {
+        case 'w':
+          this.keyStatus |= Game.wMask;
+          break;
+        case 'a':
+          this.keyStatus |= Game.aMask;
+          break;
+        case 's':
+          this.keyStatus |= Game.sMask;
+          break;
+        case 'd':
+          this.keyStatus |= Game.dMask;
+          break;
+        case ' ':
+          this.keyStatus |= Game.spaceMask;
+          break;
+      }
+    });
+    canvas.addEventListener("keyup", (event) => {
+      switch (event.key) {
+        case 'w':
+          this.keyStatus &= ~Game.wMask;
+          break;
+        case 'a':
+          this.keyStatus &= ~Game.aMask;
+          break;
+        case 's':
+          this.keyStatus &= ~Game.sMask;
+          break;
+        case 'd':
+          this.keyStatus &= ~Game.dMask;
+          break;
+        case ' ':
+          this.keyStatus &= ~Game.spaceMask;
+          break;
+      }
+    })
+  }.bind(this.game);
+
+  keybindings();
+
 }
 
 GameView.prototype.start = function() {
-  this.bindKeyHandlers();
+  // this.bindKeyHandlers();
   const refresh = () => {
     this.game.step();
     this.game.draw(this.context);
