@@ -41,9 +41,7 @@ Ship.prototype.power = function(impulse) {
 Ship.prototype.fireBullet = function() {
 
   const pos = this.pos;
-  const [dx, dy] = this.vel;
-  if (dx === 0 && dy === 0) return;
-  const vel = [dx * 5, dy * 5];
+  const vel = Util.extendVector(this.vel, 10) || [0, 10];
   const bullet = new Bullet({pos, vel});
   
   this.game.add(bullet);
