@@ -6,11 +6,11 @@ const Bullet = require('./bullet');
 const Game = function () {
   this.movingObjects = new Set();
   for (let i = 0; i < Game.NUM_ASTEROIDS; i++) {
-    const pos = this.randomPostion();
+    const pos = this.randomPosition();
     const asteroid = new Asteroid({ pos });
     this.add(asteroid);
   }
-  const pos = this.randomPostion();
+  const pos = this.randomPosition();
   this.ship = new Ship({ pos }, this);
   this.bullets = new Set();
   this.keyStatus = 0;
@@ -33,7 +33,7 @@ Game.prototype.remove = function (object) {
 }
 
 
-Game.prototype.randomPostion = function () {
+Game.prototype.randomPosition = function () {
   return [(Math.random() * Game.DIM_X), (Math.random() * Game.DIM_Y)];
 }
 
@@ -97,7 +97,7 @@ Game.prototype.step = function () {
  * @param {MovingObject} object
  */
 Game.prototype.relocate = function (object) {
-  object.pos = this.randomPostion();
+  object.pos = this.randomPosition();
 }
 
 /**
