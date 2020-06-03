@@ -31,10 +31,10 @@ a:active {
 .main small {
     color: $text-secondary;
 }
-#game-canvas {
+#main-canvas {
     width: 100%;
 }
-#game-canvas:focus {
+#main-canvas:focus {
     outline: none;
 }
 #app-container {
